@@ -5,8 +5,8 @@ services:
     build: 
       context: ./app
       dockerfile: Dockerfile
-    container_name: app_name
-    command: python3 -m http.server 7700
+    container_name: pythonformaids_app
+    command: uvicorn api:app --host 0.0.0.0 --port 7700 --reload
     ports:
       - "7700"
     volumes:
@@ -18,7 +18,7 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    container_name: app_nginx
+    container_name: pythonformaids_nginx
     volumes:
       - ./app/static:/static
       - ./nginx/config/:/etc/nginx/conf.d/
