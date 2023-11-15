@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  generic_app:
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: app_name
+    command: python3 -m http.server 7700
+    ports:
+      - "7700"
+    volumes:
+      - ./app:/usr/src/app
+    networks:
+      - app-cluster
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: app_nginx
+    volumes:
+      - ./app/static:/static
+      - ./nginx/config/:/etc/nginx/conf.d/
+    networks:
+      - app-cluster
+    ports:
+      - "80:80"
+    depends_on:
+      - generic_app
+
+networks:
+  app-cluster:
+    name: internal_cluster
