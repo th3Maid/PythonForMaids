@@ -1,0 +1,41 @@
+#  FastAPI project for real-life projects
+
+project/
+│
+├── app/
+│   ├── __init__.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── endpoints/
+│   │   │   ├── __init__.py
+│   │   │   ├── example.py
+│   │   │   ├── another_endpoint.py
+│   │   │   └── ...
+│   │   └── dependencies/
+│   │       ├── __init__.py
+│   │       ├── auth.py
+│   │       └── ...
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── database.py
+│   │   └── ...
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── user.py
+│   │   └── ...
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── user_service.py
+│   │   └── ...
+│   ├── tests/
+│   │   ├── __init__.py
+│   │   ├── test_example.py
+│   │   └── ...
+│   │
+│   └── main.py
+├── .env
+├── .gitignore
+├── pyproject.toml
+├── README.md
+└── requirements.txt
