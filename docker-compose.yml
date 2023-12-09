@@ -1,18 +1,35 @@
 version: '3.9'
 
 services:
-  generic_app:
+
+  database:
+    image: mysql:latest
+    container_name: pythonformaids_database
+    env_file:
+      - ./database/example.env
+    ports:
+      - "3306"
+    # volumes:
+    #   - ./mysql-data:/var/lib/mysql
+    networks:
+     app-cluster:
+        ipv4_address: 172.18.0.10
+
+  app:
     build: 
       context: ./app
       dockerfile: Dockerfile
     container_name: pythonformaids_app
-    command: uvicorn api:app --host 0.0.0.0 --port 7700 --reload
+    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - database
     ports:
-      - "7700"
+      - "8000:8000"
     volumes:
       - ./app:/usr/src/app
     networks:
-      - app-cluster
+      app-cluster:
+        ipv4_address: 172.18.0.20
 
   nginx:
     build:
@@ -23,12 +40,17 @@ services:
       - ./app/static:/static
       - ./nginx/config/:/etc/nginx/conf.d/
     networks:
-      - app-cluster
+      app-cluster:
+        ipv4_address: 172.18.0.30
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
-      - generic_app
+      - app
 
 networks:
   app-cluster:
     name: internal_cluster
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16

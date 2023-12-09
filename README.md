@@ -1,4 +1,4 @@
-![Python4Maid](docs/python4maids.png)
+![Python4Maid](cookbook/python4maids.png)
 
 # Overview
 
