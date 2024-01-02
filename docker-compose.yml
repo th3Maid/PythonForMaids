@@ -2,6 +2,23 @@ version: '3.9'
 
 services:
 
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: pythonformaids_nginx
+    volumes:
+      - ./app/static:/static
+      - ./nginx/config/:/etc/nginx/conf.d/
+    networks:
+      app-cluster:
+        ipv4_address: 172.18.0.1
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+
   database:
     image: mysql:latest
     container_name: pythonformaids_database
@@ -9,11 +26,11 @@ services:
       - ./database/example.env
     ports:
       - "3306"
-    # volumes:
-    #   - ./mysql-data:/var/lib/mysql
+    volumes:
+      - ./database:/var/lib/mysql
     networks:
      app-cluster:
-        ipv4_address: 172.18.0.10
+        ipv4_address: 172.18.0.2
 
   app:
     build: 
@@ -29,24 +46,7 @@ services:
       - ./app:/usr/src/app
     networks:
       app-cluster:
-        ipv4_address: 172.18.0.20
-
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    container_name: pythonformaids_nginx
-    volumes:
-      - ./app/static:/static
-      - ./nginx/config/:/etc/nginx/conf.d/
-    networks:
-      app-cluster:
-        ipv4_address: 172.18.0.30
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - app
+        ipv4_address: 172.18.0.3
 
 networks:
   app-cluster:
